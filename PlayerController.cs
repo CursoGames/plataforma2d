@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -11,22 +12,7 @@ public class PlayerController : MonoBehaviour
     [Header("Velocidade com que o personagem se move:")]
     public float velocidade;
     private Animator animator;
-    private bool estaNoChao;//Verifica se o jogador está no chão
-    
-    [Header("Ponto de verificação para saber se está no chão")]
-    public Transform checagemChao;
-    
-    [Header("FOrça do pulo")]
-    public float forcaPulo  = 18;
-    
-    [Header("Raio da verificação")] 
-    public float raio = 0.2f;
-    
-    [Header("Pega a Layer do chão")]
-    public LayerMask chaoLayer;
-
-    [Header("Duração do pulo:")]
-   public float tempoDePulo = 0.7f;
+  
     void Start()
     {
         rb =  GetComponent<Rigidbody2D>();// Pega o componente Rigidbody2D do Player
@@ -58,32 +44,13 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void Pular(InputAction.CallbackContext context)
-    {
-        if (context.performed && estaNoChao)
-        {
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, forcaPulo);
-            animator.SetBool("estaPulando",estaNoChao);
-            StartCoroutine(Pulando());
-        }
-        
-}
 
-    IEnumerator Pulando()
-    {
-        yield return new WaitForSeconds(tempoDePulo);
-        animator.SetBool("estaPulando",false);
-    }
-    void Update()
-    {
-        estaNoChao = Physics2D.OverlapCircle(checagemChao.position, raio, chaoLayer);
-        
-    }    
+     
     void FixedUpdate()
     {
         //Aplica o movimento ao Rigidbody2D do jogador
         rb.linearVelocity = new Vector2(direcao.x * velocidade, rb.linearVelocity.y);
     }
-    
-    
+
+  
 }
